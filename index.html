@@ -71,6 +71,55 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-递归斐波那契的时间复杂度" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/01/14/%E9%80%92%E5%BD%92%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" class="article-date">
+  <time class="dt-published" datetime="2023-01-13T18:47:44.000Z" itemprop="datePublished">2023-01-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2023/01/14/%E9%80%92%E5%BD%92%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">递归斐波那契的时间复杂度</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>清华大学2000（二）节选：</p>
+<p>（2）如果用大O表示法，试给出递归计算$F_n$时递归函数的时间复杂度。其中$F_0&#x3D;0,F_1&#x3D;1,F_n&#x3D;F_{n-1}+F_{n-2},n \ge 2$.</p>
+<p>参考书给出的答案是$O(2^n)$,但我认为这个答案不正确，与前一问得出的结论冲突。在递归计算中，$F_{i}$恰好被计算了$F_{n-i}$次（第一问的结论），那么，基本语句频度$T(n)$就应当是$\sum_{i&#x3D;0}^{n}F_i$.而易知$\sum_{i&#x3D;0}^{n}F_i&#x3D;F_{n+2}-1,O(F_n)&#x3D;O((\frac{\sqrt5+1}{2})^n)$,那么答案应当是$O((\frac{\sqrt5+1}{2})^n)$.</p>
+<p>代码验证如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> cnt = <span class="number">0</span>;<span class="comment">//T(n)计数器</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">fibo</span><span class="params">(<span class="type">int</span> n)</span>&#123;</span><br><span class="line">	cnt++;</span><br><span class="line">	<span class="keyword">if</span>(n &lt; <span class="number">3</span>)<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">return</span> fibo(n<span class="number">-1</span>)+fibo(n<span class="number">-2</span>);</span><br><span class="line">&#125; </span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">	<span class="type">int</span> n = <span class="number">30</span>,fb,m,<span class="built_in">pow</span>=<span class="number">1</span>;</span><br><span class="line">	<span class="type">static</span> <span class="type">double</span> sqrt5 = <span class="number">2.230679775</span>;<span class="comment">//由fn通项公式，fn与((sqrt5+1)/2)^n差sqrt5倍</span></span><br><span class="line">	<span class="type">double</span> pw = <span class="number">1.0</span>;</span><br><span class="line">	<span class="keyword">while</span>(n--)&#123;</span><br><span class="line">		fb = fibo(n);</span><br><span class="line">		m = n;</span><br><span class="line">		<span class="built_in">pow</span> = <span class="number">1</span>;<span class="comment">//2^n</span></span><br><span class="line">		pw = <span class="number">1.0</span>;<span class="comment">//((sqrt5+1)/2)^n</span></span><br><span class="line">		cnt = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">while</span>(m--)&#123;</span><br><span class="line">				<span class="built_in">pow</span>*=<span class="number">2</span>;</span><br><span class="line">				pw *= <span class="number">1.618</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d %d %lf\n&quot;</span>,fb,<span class="built_in">pow</span>,pw/sqrt5);		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>得到的运行结果如下：</p>
+<p>514229 536870912 515157.196809<br>317811 268435456 318391.345370<br>196418 134217728 196780.806780<br>121393 67108864 121619.781694<br>75025 33554432 75166.737759<br>46368 16777216 46456.574635<br>28657 8388608 28712.345262<br>17711 4194304 17745.578036<br>10946 2097152 10967.600764<br>6765 1048576 6778.492438<br>4181 524288 4189.426723<br>2584 262144 2589.262499<br>1597 131072 1600.285846<br>987 65536 989.051821<br>610 32768 611.280483<br>377 16384 377.800051<br>233 8192 233.498177<br>144 4096 144.312841<br>89 2048 89.192115<br>55 1024 55.124916<br>34 512 34.069788<br>21 256 21.056729<br>13 128 13.014048<br>8 64 8.043293<br>5 32 4.971133<br>3 16 3.072394<br>2 8 1.898884<br>1 4 1.173599<br>1 2 0.725339<br>1 1 0.448294</p>
+<p>可以看出，Tn与((sqrt5+1)&#x2F;2)^n的常数倍（1&#x2F;sqrt5）接近,而与原答案差距甚远。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/01/14/%E9%80%92%E5%BD%92%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" data-id="clcuvzdt30000c8v7ebpb8j3s" data-title="递归斐波那契的时间复杂度" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
     <article id="post-殖民政权，民族主义与极权国家建构" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2023/01/04/%E6%AE%96%E6%B0%91%E6%94%BF%E6%9D%83%EF%BC%8C%E6%B0%91%E6%97%8F%E4%B8%BB%E4%B9%89%E4%B8%8E%E6%9E%81%E6%9D%83%E5%9B%BD%E5%AE%B6%E5%BB%BA%E6%9E%84/" class="article-date">
@@ -478,51 +527,6 @@
 
 
   
-    <article id="post-泽连斯基在5月9日的演说" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2022/10/22/%E6%B3%BD%E8%BF%9E%E6%96%AF%E5%9F%BA%E5%9C%A85%E6%9C%889%E6%97%A5%E7%9A%84%E6%BC%94%E8%AF%B4/" class="article-date">
-  <time class="dt-published" datetime="2022-10-22T04:46:21.000Z" itemprop="datePublished">2022-10-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2022/10/22/%E6%B3%BD%E8%BF%9E%E6%96%AF%E5%9F%BA%E5%9C%A85%E6%9C%889%E6%97%A5%E7%9A%84%E6%BC%94%E8%AF%B4/">泽连斯基在5月9日的演说</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>伟大的乌克兰人民！<br>        在2021年8月24日，我们举国庆祝了乌克兰独立30周年，当时我们的士兵，我们的守护者，我们的武器在赫雷夏蒂克大街上行进，我们的“梦想”号运输机曾在空中翱翔。<br>        “没有什么比一个阴险的敌人更危险，没有什么比一个虚伪的朋友更具毒性”这句话出自乌克兰哲学家格里高利·史高伏罗达。在2月24日，我们意识到了这一事实，一个虚伪的朋友开始了对乌克兰的战争。<br>这不是两个国家之间的战争，而是两种世界观的战争。这场战争由炮轰了斯科沃罗达博物馆的野蛮人发动，他们相信他们的导弹可以摧毁我们的思想。这让他们感到无比恼火，对他们来说这是如此的陌生和令人生畏，即我们是可以选择自己道路的自由人。现在我们正在这条道路上战斗，我们不会把我们的土地让给任何人。</p>
-        
-          <p class="article-more-link">
-            <a href="/2022/10/22/%E6%B3%BD%E8%BF%9E%E6%96%AF%E5%9F%BA%E5%9C%A85%E6%9C%889%E6%97%A5%E7%9A%84%E6%BC%94%E8%AF%B4/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2022/10/22/%E6%B3%BD%E8%BF%9E%E6%96%AF%E5%9F%BA%E5%9C%A85%E6%9C%889%E6%97%A5%E7%9A%84%E6%BC%94%E8%AF%B4/" data-id="cl9jinu030004bov7c81gdl87" data-title="泽连斯基在5月9日的演说" class="article-share-link">Share</a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -541,7 +545,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%86%E5%8F%B2/" rel="tag">历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%86%E5%8F%B2/" rel="tag">历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li></ul>
     </div>
   </div>
 
@@ -551,7 +555,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/%E5%8E%86%E5%8F%B2/" style="font-size: 15px;">历史</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 10px;">转载</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 20px;">随笔</a>
+      <a href="/tags/%E5%8E%86%E5%8F%B2/" style="font-size: 16.67px;">历史</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 10px;">数据结构</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 13.33px;">测试</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13.33px;">转载</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 20px;">随笔</a>
     </div>
   </div>
 
@@ -573,6 +577,10 @@
       <ul>
         
           <li>
+            <a href="/2023/01/14/%E9%80%92%E5%BD%92%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E7%9A%84%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">递归斐波那契的时间复杂度</a>
+          </li>
+        
+          <li>
             <a href="/2023/01/04/%E6%AE%96%E6%B0%91%E6%94%BF%E6%9D%83%EF%BC%8C%E6%B0%91%E6%97%8F%E4%B8%BB%E4%B9%89%E4%B8%8E%E6%9E%81%E6%9D%83%E5%9B%BD%E5%AE%B6%E5%BB%BA%E6%9E%84/">殖民政权，民族主义与极权国家建构</a>
           </li>
         
@@ -586,10 +594,6 @@
         
           <li>
             <a href="/2023/01/02/%E5%BD%93%E6%88%91%E4%BB%AC%E8%B0%88%E8%AE%BA%E4%BA%BA%E6%B0%91%E6%97%B6%E6%88%91%E4%BB%AC%E5%9C%A8%E8%B0%88%E8%AE%BA%E4%BB%80%E4%B9%88/">当我们谈论人民时我们在谈论什么</a>
-          </li>
-        
-          <li>
-            <a href="/2023/01/02/%E4%BB%8E%E5%85%B1%E5%92%8C%E5%88%B0%E5%B8%9D%E5%88%B6%EF%BC%882%EF%BC%89/">从共和到帝制（2）</a>
           </li>
         
       </ul>
